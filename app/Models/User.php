@@ -55,8 +55,6 @@ class User extends Authenticatable
 
     public function sharedWatchLists(): BelongsToMany
     {
-        return $this->belongsToMany(WatchList::class, 'shared_watch_lists')
-            ->withPivot('permission')
-            ->withTimestamps();
+        return $this->belongsToMany(WatchList::class, 'watch_list_users');
     }
 }
