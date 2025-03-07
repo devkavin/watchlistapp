@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Movie;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MovieController extends Controller
 {
@@ -11,7 +13,12 @@ class MovieController extends Controller
      */
     public function index()
     {
-        //
+        $movies = Movie::all();
+        // return view('movies.index', compact('movies'));
+        dd($movies);
+        return Inertia::render('Movies/Index', [
+            'movies' => $movies
+        ]);
     }
 
     /**
@@ -19,7 +26,10 @@ class MovieController extends Controller
      */
     public function create()
     {
-        //
+        // return view('movies.create');
+        return Inertia::render('Movies/Create', [
+            //
+        ]);
     }
 
     /**
@@ -27,7 +37,18 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image_url' => 'nullable|string',
+            'description' => 'nullable|string',
+            'runtime' => 'nullable|integer',
+            'watch_url' => 'nullable|string',
+            'imdb_url' => 'nullable|string',
+        ]);
+
+        Movie::create($request->all());
+
+        return redirect()->route('movies.index')->with('success', 'Movie added.');
     }
 
     /**
@@ -57,8 +78,9 @@ class MovieController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Movie $movie)
     {
-        //
+        $movie->delete();
+        return back()->with('success', 'Movie deleted.');
     }
 }

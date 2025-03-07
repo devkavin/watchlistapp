@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WatchListController;
 use Illuminate\Foundation\Application;
@@ -27,6 +28,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/watchlists', [WatchListController::class, 'index'])->name('watchlist.index');
+    Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 });
 
 require __DIR__ . '/auth.php';

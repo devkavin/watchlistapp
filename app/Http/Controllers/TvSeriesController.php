@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TvSeries;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class TvSeriesController extends Controller
 {
@@ -11,7 +13,11 @@ class TvSeriesController extends Controller
      */
     public function index()
     {
-        //
+        $tvSeries = TvSeries::all();
+        // return view('tvseries.index', compact('tvSeries'));
+        return Inertia::render('TvSeries/Index', [
+            'tvSeries' => $tvSeries
+        ]);
     }
 
     /**
@@ -19,7 +25,9 @@ class TvSeriesController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('TvSeries/Create', [
+            //
+        ]);
     }
 
     /**
@@ -27,7 +35,18 @@ class TvSeriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image_url' => 'nullable|string',
+            'description' => 'nullable|string',
+            'ep_count' => 'nullable|integer',
+            'watch_url' => 'nullable|string',
+            'imdb_url' => 'nullable|string',
+        ]);
+
+        TvSeries::create($request->all());
+
+        return redirect()->route('tvseries.index')->with('success', 'TV Series added.');
     }
 
     /**
@@ -57,8 +76,9 @@ class TvSeriesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(TvSeries $tvSeries)
     {
-        //
+        $tvSeries->delete();
+        return back()->with('success', 'TV Series deleted.');
     }
 }
