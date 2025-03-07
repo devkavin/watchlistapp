@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('tv_series', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('watch_list_id')->constrained()->onDelete('cascade'); // Links to WatchList
             $table->string('name');
             $table->string('image_url')->nullable();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('ep_count')->nullable();
             $table->string('watch_url')->nullable();
             $table->string('imdb_url')->nullable();

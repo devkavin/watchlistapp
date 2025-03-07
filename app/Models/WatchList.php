@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Enums\WatchListTypes;
 
 class WatchList extends Model
 {
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
@@ -32,11 +35,15 @@ class WatchList extends Model
 
     public function movies(): HasMany
     {
-        return $this->hasMany(Movie::class);
+        return $this->hasMany(WatchListItem::class)->where('type', WatchListTypes::Movie->value);
     }
 
     public function tvSeries(): HasMany
     {
-        return $this->hasMany(TvSeries::class);
+        return $this->hasMany(WatchListItem::class)->where('type', WatchListTypes::Tv_series->value);
     }
+
+    protected $casts = [
+        'type' => WatchListTypes::class,
+    ];
 }
